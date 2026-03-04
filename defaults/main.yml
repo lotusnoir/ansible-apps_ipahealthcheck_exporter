@@ -2,15 +2,14 @@
 # Binary install
 ipahealthcheck_exporter_version: "0.0.17"
 ipahealthcheck_exporter_tgz: "ipahealthcheck_exporter-{{ ipahealthcheck_exporter_version }}.linux-amd64.tar.gz"
-ipahealthcheck_exporter_url: "https://github.com/camptocamp/ipahealthcheck_exporter/releases/download/v{{ ipahealthcheck_exporter_version }}/{{ ipahealthcheck_exporter_tgz }}"
+ipahealthcheck_exporter_url: "{{ ipahealthcheck_exporter_base_url }}/v{{ ipahealthcheck_exporter_version }}/{{ ipahealthcheck_exporter_tgz }}"
 ipahealthcheck_exporter_install_dir: "/usr/local/bin"
-ipahealthcheck_exporter_temp_dir: "/tmp"
+ipahealthcheck_exporter_temp_dir: "/tmp/ipa"
 ipahealthcheck_exporter_force_install: false
 
 # Systemd options
 ipahealthcheck_exporter_address: "0.0.0.0"
-ipahealthcheck_exporter_ipahealthcheck_log_path: "/var/log/ipa/healthcheck/healthcheck.log"
-ipahealthcheck_exporter_ipahealthcheck_path: "{{ ipahealthcheck_exporter_install_dir }}/ipa-healthcheck"
+ipahealthcheck_exporter_ipahealthcheck_log_path: "/var/log/ipa/ipahealthcheck.log"
+ipahealthcheck_exporter_ipahealthcheck_path: "{{ ipahealthcheck_exporter_install_dir }}"
 ipahealthcheck_exporter_metrics_path: "/metrics"
 ipahealthcheck_exporter_port: "9128"
-ipahealthcheck_exporter_sudo: false

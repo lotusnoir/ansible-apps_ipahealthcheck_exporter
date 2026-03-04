@@ -1,7 +1,7 @@
 ---
 - name: "Check for ipahealthcheck_exporter binary"
   ansible.builtin.stat:
-    path: "{{ ipahealthcheck_exporter_install_dir }}/ipahealthcheck_exporter"
+    path: "{{ ipahealthcheck_exporter_install_dir }}/ipahealthcheck-exporter"
   changed_when: false
   register: ipahealthcheck_exporter_install
 
@@ -20,7 +20,7 @@
         mode: '0755'
       with_items:
         - '{{ ipahealthcheck_exporter_install_dir }}'
-        - '{{ ipahealthcheck_exporter_temp_dir }}/ipahealthcheck_exporter'
+        - '{{ ipahealthcheck_exporter_temp_dir }}'
         - '/var/log/ipa/healthcheck'
 
     - name: "Download ipahealthcheck_exporter..."
@@ -33,21 +33,21 @@
     - name: "Unarchive ipahealthcheck_exporter..."
       ansible.builtin.unarchive:
         src: '{{ ipahealthcheck_exporter_temp_dir }}/{{ ipahealthcheck_exporter_tgz }}'
-        dest: '{{ ipahealthcheck_exporter_temp_dir }}/ipahealthcheck_exporter'
+        dest: '{{ ipahealthcheck_exporter_temp_dir }}'
         extra_opts: [--strip-components=1]
         remote_src: true
         mode: '0644'
 
     - name: "Copy ipahealthcheck_exporter binary..."
       ansible.builtin.copy:
-        src: '{{ ipahealthcheck_exporter_temp_dir }}/ipahealthcheck_exporter/ipahealthcheck_exporter'
-        dest: '{{ ipahealthcheck_exporter_install_dir }}/ipahealthcheck_exporter'
+        src: '{{ ipahealthcheck_exporter_temp_dir }}/ipahealthcheck_exporter'
+        dest: '{{ ipahealthcheck_exporter_install_dir }}/ipahealthcheck-exporter'
         remote_src: true
         mode: '0755'
 
     - name: "Remove temporary directory"
       ansible.builtin.file:
-        path: '{{ ipahealthcheck_exporter_temp_dir }}/ipahealthcheck_exporter'
+        path: '{{ ipahealthcheck_exporter_temp_dir }}'
         state: absent
 
 - name: "Create systemd for ipahealthcheck_exporter"
@@ -63,11 +63,3 @@
     state: started
     enabled: true
     daemon_reload: true
-
-
-      #- name: "Copy ipa-healthcheck binary..."
-      #  ansible.builtin.copy:
-      #    src: 'ipa-healthcheck'
-      #    dest: '{{ ipahealthcheck_exporter_install_dir }}/ipahealthcheck'
-      #    mode: '0755'
-      #  with_items:
