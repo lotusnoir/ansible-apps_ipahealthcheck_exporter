@@ -6,10 +6,11 @@ ipahealthcheck_exporter_url: "{{ ipahealthcheck_exporter_base_url }}/v{{ ipaheal
 ipahealthcheck_exporter_install_dir: "/usr/local/bin"
 ipahealthcheck_exporter_temp_dir: "/tmp/ipa"
 ipahealthcheck_exporter_force_install: false
+ipahealthcheck_exporter_service_state: "started"
 
 # Systemd options
 ipahealthcheck_exporter_address: "0.0.0.0"
-ipahealthcheck_exporter_ipahealthcheck_log_path: "/var/log/ipa/ipahealthcheck.log"
+ipahealthcheck_exporter_ipahealthcheck_log_path: "/var/log/ipa/healthcheck/healthcheck.log"
 ipahealthcheck_exporter_ipahealthcheck_path: "/bin/ipa-healthcheck"
 ipahealthcheck_exporter_metrics_path: "/metrics"
 ipahealthcheck_exporter_port: "9128"

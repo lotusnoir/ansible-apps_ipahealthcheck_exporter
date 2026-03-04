@@ -66,6 +66,14 @@
         path: '{{ ipahealthcheck_exporter_temp_dir }}'
         state: absent
 
+- name: Ensure systemd override directory exists
+  ansible.builtin.file:
+    path: /etc/systemd/system/ipa-healthcheck.service.d
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
 - name: Configure ipa-healthcheck SuccessExitStatus
   ansible.builtin.copy:
     dest: /etc/systemd/system/ipa-healthcheck.service.d/override.conf
@@ -75,18 +83,29 @@
     content: |
       [Service]
       SuccessExitStatus=1
-  notify: Reload systemd
+  notify:
+    - Reload systemd
+    - Restart ipa-healthcheck
 
 - name: "Create systemd for ipahealthcheck_exporter"
   ansible.builtin.template:
     src: 'ipahealthcheck_exporter.service.j2'
     dest: '/etc/systemd/system/ipahealthcheck_exporter.service'
-    mode: '0640'
-  notify: "Restart ipahealthcheck_exporter"
+    owner: root
+    group: root
+    mode: '0644'
+  notify:
+    - Reload systemd
+    - Restart ipahealthcheck_exporter
 
-- name: "Enable and Start ipahealthcheck_exporter.service"
-  ansible.builtin.service:
-    name: ipahealthcheck_exporter
-    state: started
+- name: Ensure ipa-healthcheck state
+  ansible.builtin.systemd:
+    name: ipa-healthcheck
+    state: "{{ ipahealthcheck_exporter_service_state }}"
     enabled: true
-    daemon_reload: true
+
+- name: Ensure ipahealthcheck_exporter state
+  ansible.builtin.systemd:
+    name: ipahealthcheck_exporter
+    state: "{{ ipahealthcheck_exporter_service_state }}"
+    enabled: true

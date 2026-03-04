@@ -4,6 +4,9 @@
   become: true
   any_errors_fatal: true
 
+  vars:
+    ipahealthcheck_exporter_service_state: stopped
+
   tasks:
     - name: Include role
       ansible.builtin.include_role:

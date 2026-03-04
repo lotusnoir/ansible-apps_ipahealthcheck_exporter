@@ -1,9 +1,16 @@
 ---
-- name: "Restart ipahealthcheck_exporter"
-  ansible.builtin.service:
-    name: "ipahealthcheck_exporter"
-    state: "restarted"
-
 - name: Reload systemd
   ansible.builtin.systemd:
     daemon_reload: true
+
+- name: Restart ipa-healthcheck
+  ansible.builtin.systemd:
+    name: ipa-healthcheck
+    state: restarted
+  when: ipahealthcheck_exporter_service_state == "started"
+
+- name: Restart ipahealthcheck_exporter
+  ansible.builtin.systemd:
+    name: ipahealthcheck_exporter
+    state: restarted
+  when: ipahealthcheck_exporter_service_state == "started"
